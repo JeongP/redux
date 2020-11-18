@@ -1,0 +1,44 @@
+<html>
+  <body>
+    <style>
+      .container{
+        border: 5px solid black;
+        padding: 10px;
+      }
+    </style>
+    <div id='red'></div>
+    <div id='green'></div>
+
+    <p>한 로직(레드컨테이너, 그린컨테이너)이 다른 로직을 건드려야 하는 경우, 로직의 갯수가 많아지면 건드려야하는 부분이 기하급수적으로 늘기 때문에 로직이 매우 많아지고 복잡해짐</p>
+
+    <script>
+      function red () {
+        document.querySelector('#red').innerHTML = 
+        `
+          <div class='container' id='component_red'>
+            <h1>red</h1>
+            <input type='button' value='fire' onclick="
+            document.querySelector('#component_red').style.backgroundColor = 'red';
+            document.querySelector('#component_green').style.backgroundColor = 'red';
+            "/>
+          </div>
+        `
+      }
+      red();
+
+      function green () {
+        document.querySelector('#green').innerHTML = 
+        `
+          <div class='container' id='component_green'>
+            <h1>green</h1>
+            <input type='button' value='fire' onclick="
+            document.querySelector('#component_red').style.backgroundColor = 'green';
+            document.querySelector('#component_green').style.backgroundColor = 'green';
+            "/>
+          </div>
+        `
+      }
+      green();
+    </script>
+  </body>
+</html>

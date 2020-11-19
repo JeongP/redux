@@ -50,7 +50,13 @@ function control(){
       var action = {type: 'mode_change', mode: 'create'};
       store.dispatch(action);
     " href="/create">create</a></li>
-    <li><input type="button" value="delete"></li>
+    <li>
+      <input type="button" value="delete" onclick="
+        event.preventDefault();
+        var action = {type: 'delete'};
+        store.dispatch(action);
+      ">
+    </li>
   </ul>
   `;
 }
@@ -99,6 +105,13 @@ function article(){
           </form>
       </article>
       `
+  } else if(state.mode === 'welcome') {
+      document.querySelector('#content').innerHTML = `
+      <article>
+          <h2>Welcome</h2>
+          Hello, Redux!!!
+      </article>
+      `
   }
   
 }
@@ -108,7 +121,7 @@ function reducer(state, action) {
   if(state === undefined) {
     return {
       max_id:2,
-      mode:'create',
+      mode:'welcome',
       selcted_id: 1,
       contents:[
         {id:1,title:'HTML',desc:'HTML is ..'},
@@ -116,7 +129,6 @@ function reducer(state, action) {
       ]
     }
   }
-
 
   // change state
   var newState;
@@ -133,6 +145,22 @@ function reducer(state, action) {
     })
   }else if(action.type === 'mode_change') {
     newState = Object.assign({},state,{mode:action.mode});
+  }
+  else if(action.type === 'delete') {
+    var newContents = [];
+    var i =0;
+    while(i<state.contents.length) {
+      if(state.selcted_id !== state.contents[i].id) {
+        newContents.push(
+          state.contents[i]
+        );
+      }
+      i++;
+    }
+    newState = Object.assign({}, state, {
+      contents: newContents,
+      mode: 'welcome'
+    })
   }
   console.log(action, state, newState);
   return newState;

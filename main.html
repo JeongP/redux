@@ -24,7 +24,13 @@ function TOC(){
   while(i<state.contents.length) {
     liTags = liTags + `
       <li>
-        <a href="${state.contents[i].id}">${state.contents[i].title}</a>
+        <a onclick="
+          event.preventDefault();
+          var action = {type: 'SELECT', id:${state.contents[i].id}};
+          store.dispatch(action);
+        " href="${state.contents[i].id}">
+          ${state.contents[i].title}
+        </a>
       </li>`;
     i++;
   }
@@ -54,14 +60,24 @@ function article(){
 }
 
 function reducer(state, action) {
+  console.log('render');
+  console.log(state, action);
+  // state 초기화.
   if(state === undefined) {
     return {
+      selcted_id: null,
       contents:[
         {id:1,title:'HTML',desc:'HTML is ..'},
         {id:2,title:'CSS', desc:'CSS is ..'}
       ]
     }
   }
+  var newState;
+  if(action.type === 'SELECT') {
+    newState = Object.assign({},state,{selcted_id:action.id});
+  }
+  console.log(action, state, newState);
+  return newState;
 }
 var store = Redux.createStore(reducer);
 subject();
